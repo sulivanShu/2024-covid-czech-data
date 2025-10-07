@@ -55,19 +55,26 @@ formatdata <- function(data) {
 
 exclude_invalid_data <- function(data) {
   data[
-    (!is.na(int_start(data$birth_year)) &
-      int_start(data$birth_year) >= as.Date("1922-07-01")) &
-      (is.na(int_end(data$date_of_death_registry)) |
-        int_end(data$date_of_death_registry) >= as.Date("2020-12-25")),
+    (
+      # la catégorie de date de naissance ne doit pas être NA
+      data$birth_year |>
+        int_start() |>
+        Negate(is.na)() &
+        # la catégorie de date de naissance ne doit pas être inférieur à une certaine date
+        data$birth_year |>
+          int_start() >= as.Date("1920-01-01")) &
+      # la catégorie de date de décès peut être NA (pas encore mort)
+      (data$date_of_death_registry |>
+        int_start() |>
+        is.na() |
+        # la catégorie de date de décès ne peut pas être antérieur au début de la campagne de vaccination
+        data$date_of_death_registry |>
+          int_start() >= as.Date("2020-12-21")) & # à remplacer par une variable
+      # le sexe des individus doit être connu
+      data$sex |>
+        Negate(is.na)() & # en fait, il n'y a en plus après les traitements ci-dessus
+      # le nombre d'infection doit être égal à 0 ou 1.
+      data$infection < 2,
+    # firgule finale nécessaire!
   ]
-}
-
-average_date <- function(data) {
-  lapply(data, \(col) {
-    vapply(col, \(cell) {
-      mean(c(int_start(cell), int_end(cell)))
-    }, numeric(1)) |>
-      as.POSIXct(origin = "1970-01-01", tz = "UTC")
-  }) |>
-    as.data.frame()
 }
