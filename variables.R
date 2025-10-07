@@ -7,16 +7,7 @@ my_czech_header <- c("Infekce", "Pohlavi", "RokNarozeni", "Datum_Prvni_davka", "
 my_english_header <- c("infection", "sex", "birth_year", "date_dose1", "date_of_death_registry")
 year_week <- c("date_dose1", "date_of_death_registry")
 year_year <- c("birth_year")
-dummy_data <- data.frame(
-  c("1", "1", "1", "1", "1") |> as.integer(),
-  c("1970-1974", "-", "1950-1955", "1860-1864", "1985-1989"),
-  c("2022-26", "", "", "", "2020-05"),
-  c("", "2023-09", "2021-01", "2022-05", ""),
-  c("", "2023-09", "2021-01", "2022-05", ""),
-  c("0", "0", "0", "0", "0") |> as.integer()
-)
 colnames(dummy_data) <- my_english_header
-
 english_header <- c(
   "id", # unique row identifier, numeric
   "infection", # infection order of the patient, numeric

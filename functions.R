@@ -32,7 +32,7 @@ load_csv_data <- function(file, with) {
   fread(file, select = with)
 }
 
-formatdata <- function(data) {
+format_data <- function(data) {
   lapply(data[year_year], \(cell) {
     ifelse(nchar(cell) == 9, sub("(^....).*", "\\1", cell), NA) |>
       paste0("-01-01") |>
