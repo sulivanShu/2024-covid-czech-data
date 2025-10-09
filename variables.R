@@ -7,7 +7,6 @@ my_czech_header <- c("Infekce", "Pohlavi", "RokNarozeni", "Datum_Prvni_davka", "
 my_english_header <- c("infection", "sex", "birth_year", "date_dose1", "date_of_death_registry")
 year_week <- c("date_dose1", "date_of_death_registry")
 year_year <- c("birth_year")
-colnames(dummy_data) <- my_english_header
 english_header <- c(
   "id", # unique row identifier, numeric
   "infection", # infection order of the patient, numeric

@@ -39,3 +39,6 @@ english_czech_data$date_dose1 |>
   unique() |>
   sort() |>
   print()
+
+english_czech_data |>
+  nrow()

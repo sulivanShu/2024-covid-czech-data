@@ -1,6 +1,6 @@
 source("variables.R")
 source("functions.R")
 source("loading.R")
-source("analysis.R")
 source("pretreatment.R")
+source("analysis.R")
 source("treatment.R")
