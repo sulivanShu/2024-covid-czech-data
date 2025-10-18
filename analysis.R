@@ -9,14 +9,12 @@ message("\n🛈 Certains individus seraient nés avant 1895 et encore vivants en
 
 english_czech_data$infection |>
   unique() |>
-  sort() |>
   print()
 
 english_czech_data[is.na(english_czech_data$infection)]
 
 english_czech_data$sex |>
   unique() |>
-  sort() |>
   print()
 
 english_czech_data[is.na(english_czech_data$sex)]

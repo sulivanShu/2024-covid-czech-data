@@ -55,25 +55,29 @@ format_data <- function(data) {
 
 exclude_invalid_data <- function(data) {
   data[
-    ( # La valeur de la catégorie de date de naissance ne doit pas être NA
+    (
       data$birth_year |>
         int_start() |>
-        Negate(is.na)() &
-        # La valeur de la catégorie de date de naissance ne doit pas être inférieure à une certaine date
-        data$birth_year |>
-          int_start() >= as.Date("1920-01-01")
+        (\(x) {
+          # La valeur de la catégorie de date de naissance ne doit pas être NA
+          !is.na(x) &
+            # la valeur de la catégorie de date de naissance comprise entre certaines dates
+            x >= as.Date("1920-01-01") &
+            x < as.Date("2020-01-01")
+        })()
     ) &
-      ( # La valeur de la catégorie de date de décès peut être NA (pas encore mort)
+      (
         data$date_of_death_registry |>
           int_start() |>
-          is.na() |
-          # La valeur de la catégorie de date de décès ne peut pas être antérieure au début de la campagne de vaccination
-          data$date_of_death_registry |>
-            int_start() >= as.Date("2020-12-27")
+          (\(x) {
+            # la valeur de la catégorie de date de décès peut être na (pas encore mort)
+            is.na(x) |
+              # la valeur de la catégorie de date de décès ne peut pas être antérieure au début de la campagne de vaccination
+              x >= as.Date("2020-12-27")
+          })()
       ) & # à remplacer par une variable
       # Le sexe des individus doit être connu
-      data$sex |>
-        Negate(is.na)() & # en fait, il n'y a en plus après les traitements ci-dessus
+      !is.na(data$sex) & # en fait, il n'y a en plus après les traitements ci-dessus
       ( # Pour les infectés le rang de l'infection doit être égale à 1.
         data$infection == 1 |
           # Pour les non-infectés, le rang de l'infection doit être NA.
