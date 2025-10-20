@@ -1,38 +1,30 @@
-# 2024-covid-czech-data
-Calculs sur les données covid tchèques, statut vaccinal vs mortalité TCC
+# MortalityAnalysisVSCZ
 
-Le Ministère de la santé de la République tchèque a publié des données covid de 2020 à 2024 qui comprennent notamment, des individus :
+This code base is using the [Julia Language](https://julialang.org/) and
+[DrWatson](https://juliadynamics.github.io/DrWatson.jl/stable/)
+to make a reproducible scientific project named
+> MortalityAnalysisVSCZ
 
-- la catégorie de l'année de naissance
-- le sexe
-- la semaine de vaccination (1e à 7e doses)
-- la semaine de décès (toutes causes confondues)
+It is authored by sulivanShu.
 
-Ce programme R :
+To (locally) reproduce this project, do the following:
 
-- télécharge et vérifie l'intégrité des données (checksum),
-- effectue des tests basiques sur le contenu de la base (contrôle d'incohérences),
-- formate les données et exclut les données incohérentes.
+0. Download this code base. Notice that raw data are typically not included in the
+   git-history and may need to be downloaded independently.
+1. Open a Julia console and do:
+   ```
+   julia> using Pkg
+   julia> Pkg.add("DrWatson") # install globally, for using `quickactivate`
+   julia> Pkg.activate("path/to/this/project")
+   julia> Pkg.instantiate()
+   ```
 
-Ce programme est divisé en trois scripts :
+This will install all necessary packages for you to be able to run the scripts and
+everything should work out of the box, including correctly finding local paths.
 
-- `main.R`
-- `variables.R`
-- `functions.R`
-
-Pour avoir un aperçu du programme, lire `main.R` et regarder les autres fichiers si besoin.
-
-Le programme peut servir de template pour des calculs plus approfondis.
-
-**Publiée sous licence GPL v3 ou supérieure.**
-
----
-
-### Indicateurs
-
-| Indicateur                                         | Valeur         |
-|----------------------------------------------------|----------------|
-|source des données|https://www.nzip.cz/data/2135-covid-19-prehled-populace|
-|Taille du fichier CSV                              | 1,4 Go         |
-| Nombre de lignes (avant exclusions)                | 12,6 millions  |
-| Nombre de lignes (après exclusions des données invalides) | 11 millions    |
+You may notice that most scripts start with the commands:
+```julia
+using DrWatson
+@quickactivate "MortalityAnalysisVSCZ"
+```
+which auto-activate the project and enable local path handling from DrWatson.
