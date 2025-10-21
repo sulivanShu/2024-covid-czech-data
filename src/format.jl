@@ -1,0 +1,6 @@
+rename!(df, my_czech_header .=> my_english_header)
+convert_to_uint8!(df, :sex)
+convert_to_uint8!(df, :infection_rank)
+parse_year_column!(df, :_5_years_cat_of_birth)
+isoweek_to_date!(df, :week_of_dose1)
+isoweek_to_date!(df, :week_of_death)
