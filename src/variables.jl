@@ -1,3 +1,5 @@
+@info "Chargement des variables"
+
 czech_data_csv = "data/exp_raw/Otevrena-data-NR-26-30-COVID-19-prehled-populace-2024-01.csv"
 czech_data_csv_url = "https://data.mzcr.cz/data/distribuce/402/Otevrena-data-NR-26-30-COVID-19-prehled-populace-2024-01.csv"
 czech_data_csv_b3sum = "28a58ec2c8360cdf4ae599cc59bd6e8c678aa7ccbab7debc5d3c3faf645dfcd6"
@@ -117,4 +119,4 @@ czech_header = [
   "Long_COVID", # week of first long COVID report, string
   "DCCI" # comorbidity index at positivity, numeric
 ]
-
+@info "Chargement terminé"

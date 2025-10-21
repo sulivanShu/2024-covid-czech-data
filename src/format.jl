@@ -1,4 +1,3 @@
-rename!(df, my_czech_header .=> my_english_header)
 convert_to_uint8!(df, :sex)
 convert_to_uint8!(df, :infection_rank)
 parse_year_column!(df, :_5_years_cat_of_birth)

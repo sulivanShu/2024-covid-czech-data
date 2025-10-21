@@ -1,13 +1,15 @@
+@info "Chargement des fonctions"
+
 # Downloads
 using Downloads
 
 function DownloadCheck(file::AbstractString, URL::AbstractString)
 	if !isfile(file)
-		println("Fichier absent, téléchargement en cours…")
+		@info "Fichier absent, téléchargement en cours…"
 		Downloads.download(URL, file)
-		println("Téléchargement terminé.")
+		@info "Téléchargement terminé."
 	else
-		println("Fichier déjà présent.")
+		@info "Fichier déjà présent."
 	end
 end
 
@@ -62,13 +64,16 @@ end
 using DataFrames, Dates
 
 function exclude!(df::DataFrame)
-    filter!(row ->
-        !ismissing(row._5_years_cat_of_birth) &&
-        (1920 <= row._5_years_cat_of_birth < 2020) &&
-        (ismissing(row.week_of_death) || row.week_of_death >= Date("2020-12-27")) &&
-        !ismissing(row.sex) &&
-        (coalesce(row.infection_rank, 0) == 1 || ismissing(row.infection_rank)),
-        df
-    )
+    first_row = df[1, :]
+    if ismissing(first_row._5_years_cat_of_birth) ||
+       !(1920 <= first_row._5_years_cat_of_birth < 2020) ||
+       ismissing(first_row.sex) ||
+       !(coalesce(first_row.infection_rank, 0) == 1 || ismissing(first_row.infection_rank))
+        return nothing  # supprimer tout le DataFrame
+    end
+    # filtrer seulement sur week_of_death
+    filter!(row -> ismissing(row.week_of_death) || row.week_of_death >= Date("2020-12-27"), df)
     return df
 end
+
+@info "Chargement terminé"
