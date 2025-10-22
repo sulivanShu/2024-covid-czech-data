@@ -1,15 +1,15 @@
-@info "Chargement des fonctions"
+@info "Loading functions"
 
 # Downloads
 using Downloads
 
 function DownloadCheck(file::AbstractString, URL::AbstractString)
 	if !isfile(file)
-		@info "Fichier absent, téléchargement en cours…"
+		@info "File missing, downloading..."
 		Downloads.download(URL, file)
-		@info "Téléchargement terminé."
+		@info "Download completed."
 	else
-		@info "Fichier déjà présent."
+		@info "File already present."
 	end
 end
 
@@ -22,9 +22,9 @@ function HashCheck(file::AbstractString, b3sum::AbstractString)
 	hash = digest(hasher)
 	computed = bytes2hex(hash)
 	if computed != b3sum
-		error("Le hash du fichier $(file) ne correspond pas à la valeur attendue.")
+		error("The hash of file $(file) does not match the expected value.")
 	else
-		@info "Le hash du fichier $(file) correspond à la valeur attendue."
+		@info "The hash of file $(file) matches the expected value."
 	end
 end
 
@@ -76,4 +76,4 @@ function exclude!(df::DataFrame)
     return df
 end
 
-@info "Chargement terminé"
+@info "Loading completed"
