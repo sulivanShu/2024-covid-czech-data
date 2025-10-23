@@ -1,4 +1,4 @@
-include("src/projectManager.jl")
+include("src/project.jl")
 include("src/variables.jl")
 include("src/functions.jl")
 include("src/download.jl")

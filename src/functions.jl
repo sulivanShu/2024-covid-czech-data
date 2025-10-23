@@ -44,7 +44,7 @@ end
 function parse_year_column!(df::DataFrame, col::Symbol)
 	df[!, col] = map(x -> 
 									 length(String(x)) == 1 ? missing : UInt16(parse(Int, first(String(x), 4))),
-									 df[!, col]
+									df[!, col]
 									)
 	return df
 end
@@ -56,7 +56,7 @@ function isoweek_to_date!(df::DataFrame, col::Symbol)
 										 year, week = parse.(Int, split(x, "-"))
 										 Date(year, 1, 1) + Week(week - 1)  # premier jour de la semaine
 									 end,
-									 df[!, col])
+									df[!, col])
 	return df
 end
 
@@ -64,16 +64,17 @@ end
 using DataFrames, Dates
 
 function exclude!(df::DataFrame)
-    first_row = df[1, :]
-    if ismissing(first_row._5_years_cat_of_birth) ||
-       !(1920 <= first_row._5_years_cat_of_birth < 2020) ||
-       ismissing(first_row.sex) ||
-       !(coalesce(first_row.infection_rank, 0) == 1 || ismissing(first_row.infection_rank))
-        return nothing  # supprimer tout le DataFrame
-    end
-    # filtrer seulement sur week_of_death
-    filter!(row -> ismissing(row.week_of_death) || row.week_of_death >= Date("2020-12-27"), df)
-    return df
+	first_row = df[1, :]
+	if ismissing(first_row._5_years_cat_of_birth) ||
+		!(1920 <= first_row._5_years_cat_of_birth < 2020) ||
+		ismissing(first_row.sex)
+		return nothing
+	end
+	filter!(row -> coalesce(row.infection_rank, 0) == 1 ||
+					ismissing(row.infection_rank) ||
+					ismissing(row.week_of_death) ||
+					row.week_of_death >= Date("2020-12-27"), df)
+	return df
 end
 
 @info "Loading completed"
