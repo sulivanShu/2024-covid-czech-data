@@ -1,5 +1,4 @@
 @info "Formatting data (parallel)"
-using ThreadsX
 df = ThreadsX.map(subdf -> begin
     convert_to_uint8!(subdf, :sex)
     convert_to_uint8!(subdf, :infection_rank)

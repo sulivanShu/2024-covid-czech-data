@@ -1,16 +1,16 @@
+# using JLD2
 @time include("src/project.jl")
+@time include("src/packages.jl")
 @time include("src/variables.jl")
 @time include("src/functions.jl")
 @time include("src/download.jl")
 @time include("src/checksum.jl")
 @time include("src/load.jl") # Ne pas oublier de charger aussi la mortalité covid pour comparer avec la mortalité normale. Vérifier aussi s'il n'y a pas de gens qui se sont fait vacciner une deuxième fois sans s'être fait vaccinés une première...
-# using JLD2
 # @save "data/exp_pro/unformated_df.jld2" df
 # @load "data/exp_pro/unformated_df.jld2" df
 # include("src/header.jl")
 # @time include("src/format.jl") # serial (slower)
-
-@load "data/exp_pro/unformated_df.jld2" df
+# @load "data/exp_pro/unformated_df.jld2" df
 @time include("src/header.jl")
 @time include("src/subdivide2.jl") # parallel (same)
 # subidiver avec week_of_dose1 aussi! vaccinés et non-vaccinés sont mélangés!
@@ -35,7 +35,6 @@
 # mettre les tests (2e doses sans 1er, mort du covid mais pas mort) ici? ou alors les mettre dans exclude2.jl ?
 # ensuite censurer les données à partir d'une certaine date...
 length(df)
-
 
 df |>
     x -> ThreadsX.map(subdf -> first(subdf, 1), x) |>
