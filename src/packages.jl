@@ -1,8 +1,9 @@
 @info "Loading packages"
-using Downloads
 using Blake3Hash
-using ThreadsX
 using CSV
 using DataFrames
 using Dates
+using Downloads
+using JLD2
+using ThreadsX
 @info "Packages loaded"
