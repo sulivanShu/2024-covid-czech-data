@@ -91,6 +91,7 @@ function exclude!(df::DataFrame)
 		(ismissing(row.infection_rank) || row.infection_rank == 1) &&
 		(ismissing(row.week_of_death)  || row.week_of_death >= cutoff),
 	 df)
+	select!(df, Not(:infection_rank))
 	return df
 end
 
