@@ -86,10 +86,11 @@ function exclude!(df::DataFrame)
 		ismissing(first_row.sex)
 		return nothing
 	end
-	filter!(row -> coalesce(row.infection_rank, 0) == 1 ||
-					ismissing(row.infection_rank) ||
-					ismissing(row.week_of_death) ||
-					row.week_of_death >= Date("2020-12-27"), df)
+	cutoff = Date("2020-12-27")  # à mettre dans variable.jl
+	filter!(row -> 
+		(ismissing(row.infection_rank) || row.infection_rank == 1) &&
+		(ismissing(row.week_of_death)  || row.week_of_death >= cutoff),
+	 df)
 	return df
 end
 
