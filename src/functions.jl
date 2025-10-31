@@ -5,9 +5,9 @@ function DownloadCheck(file::AbstractString, URL::AbstractString)
 	if !isfile(file)
 		@info "File missing, downloading..."
 		Downloads.download(URL, file)
-		@info "Download completed."
+		@info "Download completed"
 	else
-		@info "File already present."
+		@info "File already present"
 	end
 end
 
