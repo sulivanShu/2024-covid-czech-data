@@ -1,3 +1,3 @@
 @info "Filtering data (parallel)"
-df = filter(!isnothing, ThreadsX.map(subdf -> exclude!(subdf), df))
+dfs = filter(!isnothing, ThreadsX.map(subdf -> exclude!(subdf), dfs))
 @info "Filtering completed (parallel)"

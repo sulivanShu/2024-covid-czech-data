@@ -5,33 +5,20 @@
 @time include("src/download.jl")
 # @time include("src/checksum.jl")
 @time include("src/load.jl")
-# @save "data/exp_pro/unformated_df.jld2" df
-# @load "data/exp_pro/unformated_df.jld2" df
+# @save "data/exp_pro/unformated_dfs.jld2" dfs
+# @load "data/exp_pro/unformated_dfs.jld2" dfs
 @time include("src/header.jl")
 @time include("src/subdivide.jl") # parallel (same)
-# @save "data/exp_pro/subdivised_df.jld2" df
+# @save "data/exp_pro/subdivised_dfs.jld2" dfs
 # ceux qui sont nés avant 1940 ans ne sont pas réunis dans un même dataframe!
-# @load "data/exp_pro/subdivised_df.jld2" df
-# @time include("src/consistency.jl")
+# @load "data/exp_pro/subdivised_dfs.jld2" dfs
 @time include("src/columns.jl")
 @time include("src/format.jl") # parallel (faster)
-# @save "data/exp_pro/formated_df.jld2" df
-# @time include("src/subdivide.jl") # parallel (slower)
+# @save "data/exp_pro/formated_dfs.jld2" dfs
+# @load "data/exp_pro/formated_dfs.jld2" dfs
 @time include("src/exclude.jl") # parallel
-# @save "data/exp_pro/excluded_df.jld2" df
+# @save "data/exp_pro/excluded_dfs.jld2" dfs
 # merge les >80 ans. mais on ne peut pas merger les +80 ans sans les standardiser! Peut-être les traiter à part? standardiser plus tard, lors des standardisations... en tout cas, il faut merger les infection_rank...
-@load "data/exp_pro/excluded_df.jld2" df
+# @load "data/exp_pro/excluded_dfs.jld2" dfs
 # ensuite censurer les données à partir d'une certaine date...
-length(df)
-
-df |>
-x -> ThreadsX.map(subdf -> first(subdf, 1), x) |>
-x -> reduce(vcat, x) |>
-x -> sort(x, [:sex, :_5_years_cat_of_birth, :week_of_dose1]) |>
-x -> select(x, :vaccinated) |>
-x -> show(x, allrows = true)
-
-println("Taille mémoire du DataFrame : ", round(Base.summarysize(df) / 1024^2), " Mo")
-df
-typeof(df)
-df = nothing
+length(dfs)

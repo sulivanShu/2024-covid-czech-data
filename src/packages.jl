@@ -1,5 +1,6 @@
 @info "Loading packages"
 using Blake3Hash
+using Chain
 using CSV
 using DataFrames
 using Dates

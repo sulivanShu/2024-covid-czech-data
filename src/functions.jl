@@ -20,6 +20,8 @@ function HashCheck(file::AbstractString, b3sum::AbstractString)
 	if computed != b3sum
 		error("The hash of file $(file) does not match the expected value.")
 	end
+	hash_int = reinterpret(UInt64, hash[1:8])[1]
+	return hash_int
 end
 
 # Load
@@ -28,7 +30,7 @@ function load_csv_data(file::AbstractString, select_cols)
 end
 
 # Consistency check
-function dose_rank_consistency(subdf::DataFrame)
+function dose_rank_consistency(df::DataFrame)
     count = nrow(filter(row ->
         ismissing(row.week_of_dose1) &&
         (
@@ -38,7 +40,7 @@ function dose_rank_consistency(subdf::DataFrame)
             !ismissing(row.week_of_dose5) ||
             !ismissing(row.week_of_dose6) ||
             !ismissing(row.week_of_dose7)
-        ), subdf))
+        ), df))
     count != 0
 end
 
