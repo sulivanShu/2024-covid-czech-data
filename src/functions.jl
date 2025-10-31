@@ -80,21 +80,21 @@ function isoweek_to_date!(df::DataFrame, col::Symbol) # encodage alternatif poss
 	return df
 end
 
-# Exclude
-function exclude!(df::DataFrame)
-	first_row = df[1, :]
-	if ismissing(first_row._5_years_cat_of_birth) ||
-		!(1920 <= first_row._5_years_cat_of_birth < 2020) ||
-		ismissing(first_row.sex)
-		return nothing
-	end
-	cutoff = Date("2020-12-27")  # à mettre dans variable.jl
-	filter!(row -> 
-		(ismissing(row.infection_rank) || row.infection_rank == 1) &&
-		(ismissing(row.week_of_death)  || row.week_of_death >= cutoff),
-	 df)
-	select!(df, Not(:infection_rank))
-	return df
+# Vérifie si un DataFrame doit être conservé
+function is_valid_df(df::DataFrame)
+    first_row = df[1, :]
+    !ismissing(first_row._5_years_cat_of_birth) &&
+    1920 <= first_row._5_years_cat_of_birth < 2020 &&
+    !ismissing(first_row.sex)
+end
+
+# Modifie le DataFrame en place
+function modify_df!(df::DataFrame)
+    cutoff = Date("2020-12-27")
+    filter!(row -> (ismissing(row.infection_rank) || row.infection_rank == 1) &&
+                  (ismissing(row.week_of_death) || row.week_of_death >= cutoff),
+            df)
+    select!(df, Not(:infection_rank))
 end
 
 @info "Loading completed"

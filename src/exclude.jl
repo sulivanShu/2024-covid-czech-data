@@ -1,3 +1,4 @@
 @info "Filtering data (parallel)"
-dfs = filter(!isnothing, ThreadsX.map(subdf -> exclude!(subdf), dfs))
+filter!(is_valid_df, dfs)
+ThreadsX.foreach(df -> modify_df!(df), dfs)
 @info "Filtering completed (parallel)"
