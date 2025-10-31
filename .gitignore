@@ -412,10 +412,11 @@ $RECYCLE.BIN/
 *.lnk
 
 ######################################
-#             tags                   #
+#             Perso                  #
 ######################################
 
 tags
+main_test.jl
 
 ## Acknowledgements
 # Many thanks to `https://gitignore.io/`, written and maintained by Joe Blau, which contributed much material to this gitignore file.
