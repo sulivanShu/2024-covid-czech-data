@@ -31,17 +31,17 @@ end
 
 # Consistency check
 function dose_rank_consistency(df::DataFrame)
-    count = nrow(filter(row ->
-        ismissing(row.week_of_dose1) &&
-        (
-            !ismissing(row.week_of_dose2) ||
-            !ismissing(row.week_of_dose3) ||
-            !ismissing(row.week_of_dose4) ||
-            !ismissing(row.week_of_dose5) ||
-            !ismissing(row.week_of_dose6) ||
-            !ismissing(row.week_of_dose7)
-        ), df))
-    count != 0
+	count = nrow(filter(row ->
+											ismissing(row.week_of_dose1) &&
+											(
+											 !ismissing(row.week_of_dose2) ||
+											 !ismissing(row.week_of_dose3) ||
+											 !ismissing(row.week_of_dose4) ||
+											 !ismissing(row.week_of_dose5) ||
+											 !ismissing(row.week_of_dose6) ||
+											 !ismissing(row.week_of_dose7)
+											), df))
+	count != 0
 end
 
 # Remove unused columns
@@ -70,11 +70,17 @@ function parse_year_column!(df::DataFrame, col::Symbol) # encoder avec UInt8 est
 	return df
 end
 
-function isoweek_to_date!(df::DataFrame, col::Symbol) # encodage alternatif possible: YYYYWW (32bit), YYWW (16bit) ou encodage perso UInt8.
+function first_monday_of_ISOyear(year::Int)
+	jan4 = Date(year, 1, 4)  # Le 4 janvier est toujours dans la semaine 1 ISO
+	monday = firstdayofweek(jan4)  # Premier lundi de la semaine contenant le 4 janvier
+	return monday
+end
+
+function isoweek_to_date!(df::DataFrame, col::Symbol)
 	df[!, col] = map(x -> 
 									 ismissing(x) ? missing : begin
 										 year, week = parse.(Int, split(x, "-"))
-										 Date(year, 1, 1) + Week(week - 1)  # premier jour de la semaine -- UInt32
+										 first_monday_of_ISOyear(year) + Week(week - 1)
 									 end,
 									df[!, col])
 	return df
@@ -82,19 +88,19 @@ end
 
 # Vérifie si un DataFrame doit être conservé
 function is_valid_df(df::DataFrame)
-    first_row = df[1, :]
-    !ismissing(first_row._5_years_cat_of_birth) &&
-    1920 <= first_row._5_years_cat_of_birth < 2020 &&
-    !ismissing(first_row.sex)
+	first_row = df[1, :]
+	!ismissing(first_row._5_years_cat_of_birth) &&
+	1920 <= first_row._5_years_cat_of_birth < 2020 &&
+	!ismissing(first_row.sex)
 end
 
 # Modifie le DataFrame en place
 function modify_df!(df::DataFrame)
-    cutoff = Date("2020-12-27")
-    filter!(row -> (ismissing(row.infection_rank) || row.infection_rank == 1) &&
-                  (ismissing(row.week_of_death) || row.week_of_death >= cutoff),
-            df)
-    select!(df, Not(:infection_rank))
+	cutoff = Date("2020-12-21")
+	filter!(row -> (ismissing(row.infection_rank) || row.infection_rank == 1) &&
+					(ismissing(row.week_of_death) || row.week_of_death > cutoff), # Décédé strictement avant la semaine de vaccination.
+					df)
+	select!(df, Not(:infection_rank))
 end
 
 @info "Loading completed"
