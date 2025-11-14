@@ -30,6 +30,13 @@ my_english_header = [
 										 "week_of_dose7",
 										 "week_of_death"
 										 ]
+unvaccinated = Date("10000-01-01")
+still_alive = Date("10000-01-01")
+available = Date("-10000-01-01")
+unavailable = Date("10000-01-01")
+first_monday = Date("2020-12-21")
+last_monday = Date("2024-06-24")
+mondays = collect(first_monday:Week(1):last_monday)
 year_week = ["week_of_dose1", "week_of_death"]
 year_year = ["_5_years_cat_of_birth"]
 english_header = [
