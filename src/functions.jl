@@ -160,7 +160,7 @@ function process_first_unvaccinated!(
 													 death = row.week_of_death
 													 ))
 			# Un non-vaccinés redevient disponible soit lorsqu'il est vaccinés, soit lorsqu'il sort de la weekly_entry. Attention, il pourrait être "disponible", après sa mort, d'où l'importance de vérifier si les non-vaccinés ne sont pas mort, avant d'intégrer ou de réintégrer une weekly_entry!
-			subgroup[i, :available] = exit
+			subgroup[i, :available] = exit + Week(1)
 		end
 	end
 	# Il faut ensuite noter dans `when_what_where_dict` les non-vaccinés qui devront être remplacés, et quand.
@@ -239,7 +239,7 @@ function replace_unvaccinated!(
 			for i in selected
 				row = subgroup[i, :]
 				exit = min(row.week_of_dose1, _what + Week(53))
-				subgroup[i, :available] = exit
+				subgroup[i, :available] = exit + Week(1)
 			end
 			weekly_entry = weekly_entries[_what]
 			for (k, i) in enumerate(_where)
